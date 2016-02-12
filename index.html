@@ -1,29 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+<title>Angular Form</title>
 <head>
-    <meta charset="UTF-8">
-    <title>Anugular</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+  <style type="text/css">
     
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/angular.min.js"></script>
-    <script src="js/script.js"></script>
+.ng-scope{
+    padding: 30px;
+}
+label{
+    float: left;
+}
+.gender{
+    padding: 0px 10px;
+}
+.help-block{
+    clear: both;
+}
+.form-group{
+    overflow: hidden;
+}
+.form-control{
+    width: 80%;
+    float: left;
+}
+input.form-control, select.form-control{
+    height: 35px;
+}
+input[type='radio']{
+    width: auto;
+    height: auto;
+}
+@media only screen and (max-width:767px){
+    .form-control{
+        width: 100%;
+    }
+}
+  </style>
 </head>
-<body>
-   <div ng-app="appName">
-    <h1>Hello, Angular!!!</h1>
-    {{ 3454*465 }}
-    <h1>{{ mes }}</h1>
-    <div ng-controller="MainController">
-        <h1>{{ message }}</h1>
-        <h1>{{ message.length }}</h1>
-    </div>
-    </div>
-    <div ng-app="myApp">
-    <div ng-controller="Controller">
-        <div>First Name : {{ person.firstname }}</div>
-        <div>Last Name : {{ person.lastname }}</div>
-    </div>
-    </div>
-    
+
+<body ng-app>
+  <div class="col-sm-offset-2 col-md-offset-3 col-md-6">
+    <form name="userForm" novalidate="">
+      <!-- Name -->
+      <div class="form-group" ng-class="{ 'has-error' : submitted && userForm.name.$error.required }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Name</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="text" name="name" class="form-control" ng-model="user.name" required="" />
+          <p ng-show="submitted && userForm.name.$error.required" class="help-block">Your name is required.</p>
+        </div>
+      </div>
+      <!-- / Name -->
+      <!-- Gender -->
+      <div class="form-group" ng-class="{ 'has-error' : submitted && userForm.gender.$error.required }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Gender</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="radio" name="gender" class="form-control" ng-model="user.gender" value="Male" required="" />
+          <label class="gender">Male</label>
+          <input type="radio" name="gender" class="form-control" ng-model="user.gender" value="Female" required="" />
+          <label class="gender">Female</label>
+          <p ng-show="submitted && userForm.gender.$error.required" class="help-block">Your gender is required.</p>
+        </div>
+      </div>
+      <!-- / Gender -->
+      <!-- Email -->
+      <div class="form-group" ng-class="{ 'has-error' : (submitted && userForm.email.$error.required) ||  (submitted && userForm.email.$error.email)}">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Email</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="email" name="email" class="form-control" ng-model="user.email" required="" />
+          <p ng-show="submitted && userForm.email.$error.required" class="help-block">Email is required.</p>
+          <p ng-show="submitted && userForm.email.$error.email" class="help-block">Enter valid email.</p>
+        </div>
+      </div>
+      <!-- / Email -->
+      <!-- Phone number -->
+      <div class="form-group" ng-class="{ 'has-error' : (submitted && userForm.tel.$error.required) ||  (submitted && userForm.tel.$error.pattern) || (submitted && userForm.tel.$error.minlength) || (submitted && userForm.tel.$error.maxlength)}">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Phone Number</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="text" name="tel" class="form-control" ng-model="user.tel" required="" ng-pattern="/^(\d)+$/" ng-minlength="6" ng-maxlength="12" />
+          <p ng-show="submitted && userForm.tel.$error.required" class="help-block">Phone number is required.</p>
+          <p ng-show="submitted && userForm.tel.$error.pattern" class="help-block">Enter valid Phone number.</p>
+          <p ng-show="submitted && userForm.tel.$error.minlength" class="help-block">Phone number too small.</p>
+          <p ng-show="submitted && userForm.tel.$error.maxlength" class="help-block">Phone number too large.</p>
+        </div>
+      </div>
+      <!-- / Phone number -->
+      <!-- Address -->
+      <div class="form-group" ng-class="{ 'has-error' : (submitted && userForm.address.$error.required) || (submitted && userForm.address.$error.minlength) }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Address</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <textarea name="address" class="form-control" ng-model="user.address" ng-minlength="20" required=""></textarea>
+          <p ng-show="submitted && userForm.address.$error.required" class="help-block">Your address is required.</p>
+          <p ng-show="submitted && userForm.address.$error.minlength" class="help-block">Requires minimum of 20 characters.</p>
+        </div>
+      </div>
+      <!-- / Address -->
+      <!-- City -->
+      <div class="form-group" ng-class="{ 'has-error' : submitted && userForm.city.$error.required }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>City</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="text" name="city" class="form-control" ng-model="user.city" required="" />
+          <p ng-show="submitted && userForm.city.$error.required" class="help-block">Your city is required.</p>
+        </div>
+      </div>
+      <!-- / City -->
+      <!-- State -->
+      <div class="form-group" ng-class="{ 'has-error' : submitted && userForm.state.$error.required }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>State</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <select name="state" class="form-control" ng-model="user.state" required="">
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Telugana">Telugana</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="West Bengal">West Bengal</option>
+          </select>
+          <p ng-show="submitted && userForm.state.$error.required" class="help-block">Your State is required.</p>
+        </div>
+      </div>
+      <!-- / State -->
+      <!-- Pin code -->
+      <div class="form-group" ng-class="{ 'has-error' : (submitted && userForm.pin.$error.required) || (submitted && userForm.pin.$error.pattern) }">
+        <div class="col-sm-12 col-xs-12 col-md-4">
+          <label>Pin Code</label>
+        </div>
+        <div class="col-sm-12 col-xs-12 col-md-8">
+          <input type="tel" name="pin" class="form-control" ng-model="user.pin" required="" ng-pattern="/^(\d{6})$/" />
+          <p ng-show="submitted && userForm.pin.$error.required" class="help-block">Your pin is required.</p>
+          <p ng-show="submitted && userForm.pin.$error.pattern" class="help-block">Enter 6 digits number only</p>
+        </div>
+      </div>
+      <!-- / Pin code -->
+       <div class="form-group">
+         <div class="col-sm-12 col-xs-12 col-md-4"><label></label></div>
+            <div class="col-sm-12 col-xs-12 col-md-8">
+        <button type="submit" name="submit" class="btn btn-primary" ng-click="submitted=true">Submit</button>
+             </div>
+        </div>
+      <div ng-show="submitted && userForm.submit.$valid" class="alert-success" style="padding:10px;margin:10px 0;">Thank you for your submission</div>
+    </form>
+  </div>
 </body>
+
 </html>
